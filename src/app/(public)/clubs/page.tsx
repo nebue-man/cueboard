@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { searchClubs } from "@/lib/data/clubs";
 import { ClubCard } from "@/components/clubs/ClubCard";
 import { AvailabilityFilter } from "@/components/clubs/AvailabilityFilter";
+import { ClubMap } from "@/components/clubs/ClubMap";
 import { TableType } from "@/types";
 
 type SearchParams = Promise<{ type?: string; date?: string }>;
@@ -18,6 +19,9 @@ export default async function ClubsPage({ searchParams }: { searchParams: Search
         <Suspense>
           <AvailabilityFilter />
         </Suspense>
+      </div>
+      <div className="mt-6 overflow-hidden rounded-xl">
+        <ClubMap clubs={clubs.map((c) => ({ id: c.id, name: c.name, lat: c.lat, lng: c.lng, slug: c.slug }))} />
       </div>
       {clubs.length === 0 ? (
         <p className="mt-12 text-center text-gray-500">No clubs found. Try different filters.</p>
