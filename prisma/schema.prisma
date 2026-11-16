@@ -24,12 +24,13 @@ model Club {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  tables        Table[]
-  slotDurations SlotDuration[]
-  products      Product[]
-  bookings      Booking[]
-  owners        ClubOwner[]
-  invoices      Invoice[]
+  tables         Table[]
+  slotDurations  SlotDuration[]
+  operatingHours OperatingHours[]
+  products       Product[]
+  bookings       Booking[]
+  owners         ClubOwner[]
+  invoices       Invoice[]
 }
 
 model Table {
@@ -41,8 +42,10 @@ model Table {
   isActive     Boolean   @default(true)
   createdAt    DateTime  @default(now())
 
-  club          Club           @relation(fields: [clubId], references: [id])
+  club          Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
   bookingTables BookingTable[]
+
+  @@index([clubId])
 }
 
 enum TableType {
@@ -59,8 +62,10 @@ model SlotDuration {
   label     String
   createdAt DateTime @default(now())
 
-  club     Club      @relation(fields: [clubId], references: [id])
+  club     Club      @relation(fields: [clubId], references: [id], onDelete: Cascade)
   bookings Booking[]
+
+  @@index([clubId])
 }
 
 model OperatingHours {
@@ -70,6 +75,10 @@ model OperatingHours {
   openTime  String
   closeTime String
   isClosed  Boolean @default(false)
+
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
 }
 
 model Product {
@@ -82,7 +91,9 @@ model Product {
   isActive    Boolean     @default(true)
   createdAt   DateTime    @default(now())
 
-  club Club @relation(fields: [clubId], references: [id])
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
 }
 
 enum ProductType {
@@ -103,10 +114,13 @@ model Booking {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
-  club          Club           @relation(fields: [clubId], references: [id])
+  club          Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
   slotDuration  SlotDuration   @relation(fields: [slotDurationId], references: [id])
   bookingTables BookingTable[]
   rating        Rating?
+
+  @@index([clubId])
+  @@index([clubId, date])
 }
 
 enum BookingStatus {
@@ -143,7 +157,9 @@ model ClubOwner {
   name         String
   createdAt    DateTime @default(now())
 
-  club Club @relation(fields: [clubId], references: [id])
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
 }
 
 model Invoice {
@@ -157,7 +173,9 @@ model Invoice {
   status         InvoiceStatus @default(PENDING)
   createdAt      DateTime      @default(now())
 
-  club Club @relation(fields: [clubId], references: [id])
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId])
 }
 
 enum InvoiceStatus {
