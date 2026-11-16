@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import type { Club } from "@/types";
 
@@ -10,6 +11,7 @@ const MAP_CONTAINER_STYLE = { width: "100%", height: "400px" };
 const DEFAULT_CENTER = { lat: 6.9271, lng: 79.8612 }; // Colombo
 
 export function ClubMap({ clubs }: Props) {
+  const router = useRouter();
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
   });
@@ -25,7 +27,7 @@ export function ClubMap({ clubs }: Props) {
           key={club.id}
           position={{ lat: club.lat, lng: club.lng }}
           title={club.name}
-          onClick={() => (window.location.href = `/clubs/${club.slug}`)}
+          onClick={() => router.push(`/clubs/${club.slug}`)}
         />
       ))}
     </GoogleMap>
