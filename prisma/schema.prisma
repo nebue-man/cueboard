@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Club {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  address     String
+  city        String
+  lat         Float
+  lng         Float
+  phone       String
+  whatsappId  String?
+  coverImage  String?
+  photos      String[]
+  rating      Float     @default(0)
+  ratingCount Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tables        Table[]
+  slotDurations SlotDuration[]
+  products      Product[]
+  bookings      Booking[]
+  owners        ClubOwner[]
+  invoices      Invoice[]
+}
+
+model Table {
+  id           String    @id @default(cuid())
+  clubId       String
+  name         String
+  type         TableType
+  pricePerSlot Float
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+
+  club          Club           @relation(fields: [clubId], references: [id])
+  bookingTables BookingTable[]
+}
+
+enum TableType {
+  POOL
+  SNOOKER
+  BILLIARDS
+  CAROM
+}
+
+model SlotDuration {
+  id        String   @id @default(cuid())
+  clubId    String
+  minutes   Int
+  label     String
+  createdAt DateTime @default(now())
+
+  club     Club      @relation(fields: [clubId], references: [id])
+  bookings Booking[]
+}
+
+model OperatingHours {
+  id        String  @id @default(cuid())
+  clubId    String
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+  isClosed  Boolean @default(false)
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  clubId      String
+  name        String
+  description String?
+  type        ProductType
+  price       Float?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+enum ProductType {
+  PHYSICAL
+  SERVICE
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  clubId         String
+  slotDurationId String
+  guestName      String
+  guestPhone     String
+  playerCount    Int
+  date           DateTime      @db.Date
+  startTime      String
+  status         BookingStatus @default(CONFIRMED)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  club          Club           @relation(fields: [clubId], references: [id])
+  slotDuration  SlotDuration   @relation(fields: [slotDurationId], references: [id])
+  bookingTables BookingTable[]
+  rating        Rating?
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  NO_SHOW
+}
+
+model BookingTable {
+  bookingId String
+  tableId   String
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  table   Table   @relation(fields: [tableId], references: [id])
+
+  @@id([bookingId, tableId])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  bookingId String   @unique
+  clubId    String
+  stars     Int
+  createdAt DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model ClubOwner {
+  id           String   @id @default(cuid())
+  clubId       String
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  clubId         String
+  periodStart    DateTime
+  periodEnd      DateTime
+  bookingCount   Int
+  commissionRate Float         @default(0.1)
+  totalAmount    Float
+  status         InvoiceStatus @default(PENDING)
+  createdAt      DateTime      @default(now())
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+enum InvoiceStatus {
+  PENDING
+  SENT
+  PAID
+}
