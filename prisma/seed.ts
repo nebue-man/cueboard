@@ -9,6 +9,14 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  await prisma.bookingTable.deleteMany();
+  await prisma.booking.deleteMany();
+  await prisma.invoice.deleteMany();
+  await prisma.operatingHours.deleteMany();
+  await prisma.slotDuration.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.table.deleteMany();
+  await prisma.clubOwner.deleteMany();
   await prisma.club.deleteMany();
 
   const club1 = await prisma.club.create({
