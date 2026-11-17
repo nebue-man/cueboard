@@ -9,7 +9,7 @@ const GenerateSchema = z.object({
   commissionRate: z.number().min(0).max(1).default(0.1),
 });
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
