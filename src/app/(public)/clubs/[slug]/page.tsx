@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getClubBySlug } from "@/lib/data/clubs";
 import { TableTypeBadge } from "@/components/clubs/TableTypeBadge";
+import { BookingWidget } from "@/components/booking/BookingWidget";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -55,9 +56,16 @@ export default async function ClubProfilePage({ params }: Props) {
         <p className="mt-2 text-gray-700">📞 {club.phone}</p>
       </section>
 
-      <div className="mt-10 rounded-xl border-2 border-dashed border-brand/30 p-8 text-center text-gray-500">
-        Booking widget — implemented in Slice C
-      </div>
+      <section className="mt-10">
+        <h2 className="font-serif text-2xl font-semibold text-brand">Book a table</h2>
+        <div className="mt-4">
+          <BookingWidget
+            clubId={club.id}
+            slotDurations={club.slotDurations}
+            tables={club.tables.filter((t) => t.isActive)}
+          />
+        </div>
+      </section>
     </div>
   );
 }
