@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/dashboard/bookings", label: "Bookings" },
   { href: "/dashboard/tables",   label: "Tables" },
   { href: "/dashboard/products", label: "Products" },
+  { href: "/dashboard/invoices", label: "Invoices" },
 ];
 
 async function handleSignOut() {
