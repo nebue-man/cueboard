@@ -15,7 +15,7 @@ export async function PATCH(
   if (!product || product.clubId !== session.user.clubId) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const parsed = UpdateProductSchema.safeParse(await req.json());
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
 
   const updated = await db.product.update({ where: { id }, data: parsed.data });
   return NextResponse.json(updated);

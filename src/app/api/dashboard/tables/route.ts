@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
   const body   = await req.json();
   const parsed = CreateTableSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
 
   const table = await db.table.create({
     data: { ...parsed.data, clubId: session.user.clubId },
