@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const parsed = CreateBookingSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
   }
 
   const { clubId, slotDurationId, tableIds, date, startTime } = parsed.data;
