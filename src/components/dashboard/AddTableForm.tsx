@@ -6,7 +6,7 @@ import { CreateTableSchema, CreateTableInput } from "@/lib/validations";
 
 export function AddTableForm() {
   const router = useRouter();
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<CreateTableInput>({
+  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<CreateTableInput>({
     resolver: zodResolver(CreateTableSchema),
   });
 
