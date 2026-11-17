@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-brand: #1a3a5c;
+  --color-brand-light: #2a5a8c;
+  --color-brand-dark: #0d1f33;
+
+  /* Surface colors */
+  --color-surface: #fafaf8;
+  --color-surface-dark: #0f172a;
+
+  /* Accent */
+  --color-accent: #c8a96e;
+
+  /* Fonts */
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
