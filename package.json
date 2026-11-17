@@ -12,15 +12,19 @@
     "test:ci": "jest --ci --coverage"
   },
   "dependencies": {
+    "@hookform/resolvers": "^7.0.6",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "@react-google-maps/api": "^2.20.8",
     "@tailwindcss/postcss": "^4.3.5",
     "bcryptjs": "^3.0.3",
     "next": "16.4.6",
+    "next-auth": "^5.0.0-beta.32",
     "pg": "^8.23.1",
     "prisma": "^7.10.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-hook-form": "^7.92.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
