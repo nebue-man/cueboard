@@ -18,7 +18,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const owner = await db.clubOwner.findUnique({
           where: { email: parsed.data.email },
-          include: { club: true },
         });
         if (!owner) return null;
 
@@ -31,11 +30,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt({ token, user }) {
-      if (user) token.clubId = (user as typeof user & { clubId: string }).clubId;
+      if (user) token.clubId = user.clubId;
       return token;
     },
     session({ session, token }) {
-      session.user.clubId = token.clubId as string;
+      session.user.clubId = token.clubId;
       return session;
     },
   },
@@ -45,7 +44,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 });
 
 declare module "next-auth" {
+  interface User {
+    clubId: string;
+  }
   interface Session {
     user: { clubId: string; name?: string | null; email?: string | null; image?: string | null };
+  }
+}
+
+declare module "@auth/core/jwt" {
+  interface JWT {
+    clubId: string;
   }
 }
